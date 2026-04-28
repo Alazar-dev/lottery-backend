@@ -14,7 +14,7 @@ const schema = new mongoose.Schema<IUser>({
     },
     role: {
         type: String,
-        enum: ['Admin', 'Customer'],
+        enum: ['Admin', 'CUSTOMER'],
         default: 'CUSTOMER',
     },
     walletBalance: {
