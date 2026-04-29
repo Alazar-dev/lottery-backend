@@ -5,6 +5,7 @@ import cors from 'cors'
 import authRoutes from "./routes/authRoutes";
 import testRoutes from "./routes/testRoutes";
 import ticketRoutes from "./routes/ticketRoutes";
+import paymentRoutes from "./routes/paymentRoutes";
 
 dotenv.config();
 
@@ -20,5 +21,6 @@ mongoose.connect(process.env.MONGO_URI as string)
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
 app.use("/api/ticket", ticketRoutes);
+app.use("/api/payment", paymentRoutes);
 
 app.listen(process.env.PORT as string, () => console.log(`Listening on ${process.env.PORT}`));
