@@ -7,6 +7,7 @@ import testRoutes from "./routes/testRoutes";
 import ticketRoutes from "./routes/ticketRoutes";
 import paymentRoutes from "./routes/paymentRoutes";
 import drawRoutes from "./routes/drawRoutes";
+import adminRoutes from "./routes/adminRoutes";
 
 dotenv.config();
 
@@ -24,5 +25,6 @@ app.use("/api/test", testRoutes);
 app.use("/api/ticket", ticketRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/draw", drawRoutes);
+app.use("/api/admin", adminRoutes);
 
 app.listen(process.env.PORT as string, () => console.log(`Listening on ${process.env.PORT}`));
