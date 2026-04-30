@@ -68,17 +68,36 @@ export const createTicket = async (
     }
 };
 
-export const getMyTickets = async (
-    req: Request,
-    res: Response
-) => {
+export const getMyTickets = async (req: Request, res: Response) => {
     try {
-        const tickets = await Ticket.find({
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 6;
+
+        const skip = (page - 1) * limit;
+
+        const filter = {
             //@ts-ignore
             userId: req.user?.userId,
-        }).sort({ createdAt: -1 });
+        };
 
-        res.json(tickets);
+        const [tickets, totalTickets] = await Promise.all([
+            Ticket.find(filter)
+                .sort({ createdAt: -1 })
+                .skip(skip)
+                .limit(limit),
+
+            Ticket.countDocuments(filter),
+        ]);
+
+        res.json({
+            tickets,
+            pagination: {
+                currentPage: page,
+                totalPages: Math.ceil(totalTickets / limit),
+                totalTickets,
+                limit,
+            },
+        });
     } catch (err) {
         res.status(500).json({
             message: "Error fetching tickets",
