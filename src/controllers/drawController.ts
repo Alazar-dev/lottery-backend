@@ -102,6 +102,7 @@ export const triggerDraw = async (
 
             prizePool,
 
+            //@ts-ignore
             winners: winners.map(
                 (w) => w.userId
             ),

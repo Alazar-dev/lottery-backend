@@ -52,7 +52,7 @@ export const initiatePayment = async (
                 tx_ref,
 
                 return_url:
-                    `http://localhost:5173/payment-success?tx_ref=${tx_ref}`,
+                    `http://localhost:5173/dashboard?tx_ref=${tx_ref}`,
             },
             {
                 headers: {
