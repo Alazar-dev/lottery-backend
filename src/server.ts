@@ -9,6 +9,8 @@ import paymentRoutes from "./routes/paymentRoutes";
 import drawRoutes from "./routes/drawRoutes";
 import adminRoutes from "./routes/adminRoutes";
 
+import {startWeeklyDrawJob} from "./jobs/drawJob";
+
 dotenv.config();
 
 const app = express();
@@ -26,5 +28,14 @@ app.use("/api/ticket", ticketRoutes);
 app.use("/api/payment", paymentRoutes);
 app.use("/api/draw", drawRoutes);
 app.use("/api/admin", adminRoutes);
+
+mongoose
+    .connect(process.env.MONGO_URI as string)
+    .then(() => {
+        console.log("MongoDB connected");
+
+        startWeeklyDrawJob();
+    })
+    .catch((err) => console.error(err));
 
 app.listen(process.env.PORT as string, () => console.log(`Listening on ${process.env.PORT}`));
