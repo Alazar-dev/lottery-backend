@@ -1,34 +1,23 @@
-import nodemailer from "nodemailer";
-
-const transporter = nodemailer.createTransport({
-  //@ts-ignore
-  host: "smtp.gmail.com",
-  port: 587,
-  secure: false,
-  requireTLS: true,
-  family: 4,
-  auth: {
-    user: process.env.EMAIL_ID,
-    pass: process.env.EMAIL_PASS,
-  },
-});
+import { Resend } from "resend";
 
 export const sendOtpEmail = async (email: string, otp: string) => {
-  try {
-    if (!process.env.EMAIL_ID || !process.env.EMAIL_PASS) {
-      throw new Error("EMAIL_ID or EMAIL_PASS is missing");
+    const apiKey = process.env.RESEND_API_KEY;
+
+    if (!apiKey) {
+        throw new Error("RESEND_API_KEY is missing");
     }
 
-    await transporter.sendMail({
-      from: process.env.EMAIL_ID,
-      to: email,
-      subject: "Your OTP Code",
-      text: `Your OTP code is: ${otp}`,
+    const resend = new Resend(apiKey);
+
+    const { error } = await resend.emails.send({
+        from: process.env.EMAIL_FROM || "Lottery App <onboarding@resend.dev>",
+        to: [email],
+        subject: "Your OTP Code",
+        text: `Your OTP code is: ${otp}`,
     });
 
-    console.log(`OTP email sent to ${email}`);
-  } catch (error) {
-    console.error("Failed to send OTP email:", error);
-    throw error;
-  }
+    if (error) {
+        console.error("Failed to send OTP email:", error);
+        throw new Error("Failed to send OTP email");
+    }
 };
