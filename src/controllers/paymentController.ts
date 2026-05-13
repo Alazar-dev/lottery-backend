@@ -53,7 +53,7 @@ export const initiatePayment = async (
                 tx_ref,
 
                 return_url:
-                    `http://localhost:5173/dashboard?tx_ref=${tx_ref}`,
+                    `https://lottery-client-mocha.vercel.app/dashboard?tx_ref=${tx_ref}`,
             },
             {
                 headers: {
