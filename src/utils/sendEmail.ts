@@ -15,12 +15,12 @@ const transporter = nodemailer.createTransport({
 
 export const sendOtpEmail = async (email: string, otp: string) => {
   try {
-    if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-      throw new Error("EMAIL_USER or EMAIL_PASS is missing");
+    if (!process.env.EMAIL_ID || !process.env.EMAIL_PASS) {
+      throw new Error("EMAIL_ID or EMAIL_PASS is missing");
     }
 
     await transporter.sendMail({
-      from: process.env.EMAIL_USER,
+      from: process.env.EMAIL_ID,
       to: email,
       subject: "Your OTP Code",
       text: `Your OTP code is: ${otp}`,
