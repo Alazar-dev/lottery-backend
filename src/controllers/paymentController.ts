@@ -34,6 +34,7 @@ export const initiatePayment = async (
         const tx_ref = uuidv4();
 
         await Transaction.create({
+            //@ts-ignore
             userId,
             amount: 10,
             type: "PAYMENT",
