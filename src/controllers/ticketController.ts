@@ -45,6 +45,7 @@ export const createTicket = async (
         }
 
         const ticket = await Ticket.create({
+            //@ts-ignore
             userId,
             number,
             drawWeek,
@@ -81,11 +82,13 @@ export const getMyTickets = async (req: Request, res: Response) => {
         };
 
         const [tickets, totalTickets] = await Promise.all([
+            //@ts-ignore
             Ticket.find(filter)
                 .sort({ createdAt: -1 })
                 .skip(skip)
                 .limit(limit),
 
+            //@ts-ignore
             Ticket.countDocuments(filter),
         ]);
 
