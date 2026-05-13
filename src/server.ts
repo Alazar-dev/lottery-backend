@@ -18,9 +18,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI as string)
-    .then(() => console.log("MongoDB Connected!"))
-    .catch((err) => console.error(err));
+app.get("/", (_req, res) => {
+  res.send("API is running");
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/test", testRoutes);
@@ -29,13 +29,27 @@ app.use("/api/payment", paymentRoutes);
 app.use("/api/draw", drawRoutes);
 app.use("/api/admin", adminRoutes);
 
-mongoose
-    .connect(process.env.MONGO_URI as string)
-    .then(() => {
-        console.log("MongoDB connected");
+const PORT = Number(process.env.PORT) || 10000;
+const HOST = "0.0.0.0";
 
-        startWeeklyDrawJob();
-    })
-    .catch((err) => console.error(err));
+async function bootstrap() {
+  try {
+    if (!process.env.MONGO_URI) {
+      throw new Error("MONGO_URI is missing");
+    }
 
-app.listen(process.env.PORT as string, () => console.log(`Listening on ${process.env.PORT}`));
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("MongoDB connected");
+
+    startWeeklyDrawJob();
+
+    app.listen(PORT, HOST, () => {
+      console.log(`Server running on http://${HOST}:${PORT}`);
+    });
+  } catch (err) {
+    console.error("Server startup failed:", err);
+    process.exit(1);
+  }
+}
+
+bootstrap();
